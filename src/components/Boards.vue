@@ -52,11 +52,6 @@
                       <v-switch color="green lighten-3" label="Descriptions" v-model="showDescription"></v-switch>
                     </v-list-tile-action>
                   </v-list-tile>
-                  <v-list-tile>
-                    <v-list-tile-action>
-                      <v-switch color="green lighten-3" label="Members" v-model="showMembers"></v-switch>
-                    </v-list-tile-action>
-                  </v-list-tile>
                 </v-list>
               </v-card>
             </v-menu>
@@ -83,32 +78,14 @@
                   <v-flex xs12 class="mt-3" v-for="card in list['cards']" :key="card.id">
                     <v-card class="grey lighten-5 px-2 elevation-2">
                       <v-card-text class="px-2">
-                        <div v-if="showLabels" v-for="label in card['labels']" :key="label.name" class="card-labels">
-                          <div v-bind:style="{ 'background-color': $store.state.labelColor[label.color], 'color':'#fff' } " class="card-label-object badge badge-pill">
-                            {{ label.name }}
-                          </div>
+                        <div v-if="showLabels" v-for="label in card['labels']" :key="label.id" style="display: inline">
+                          <v-chip class="mt-2" v-bind:style="{ 'background-color': $store.state.labelColor[label.color], 'color':'#fff' } " label>{{ label.name }}</v-chip>
                         </div>
                         <h2>{{ card.name }}</h2>
                         <hr>
                         <div v-if="showDescription">
                           <div class="subhead font-weight-black grey--text">Details:</div>
                           <vue-markdown>{{ card.desc }}</vue-markdown>
-                        </div>
-                        <div v-if="showMembers">
-                          <div v-if="card.members[0]" class="members-box">
-                            <div class="subhead font-weight-black grey--text">Members:</div>
-                            <div style="display:inline;" v-for="member in card['members']" :key="member.id">
-                              <v-tooltip top>
-                                <v-btn v-if="!member.avatarHash" slot="activator" color="grey" fab outline small>
-                                  {{ member.initials }}
-                                </v-btn>
-                                <v-btn v-else slot="activator" color="grey lighten-2" fab small>
-                                  <img style="border-radius: 50%;" v-bind:src="'https://trello-avatars.s3.amazonaws.com/' + member.avatarHash +'/30.png'">
-                                </v-btn>
-                                <span>{{ member.fullName }}</span>
-                              </v-tooltip>
-                            </div>
-                          </div>
                         </div>
                         <div v-if="showDue" class="mt-2 mb-2">
                           <v-chip outline v-if="card.due" label color="green">
@@ -203,8 +180,7 @@ export default {
       showLabels: true,
       showComments: true,
       showDescription: true,
-      showDue: true,
-      showMembers: true
+      showDue: true
     }
 
   },

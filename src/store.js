@@ -83,20 +83,12 @@ export default new Vuex.Store({
               //console.log('Inside locaListCards...');
               cards.forEach( function(card) {
                 // Get all comments foreach card
-                window.Trello.get('/cards/' + card.id  + '/actions?filter=commentCard',
+                window.Trello.get('/cards/' + card.id  + '/actions?filter=commentCard&limit=3',
                   function(comments) {
                     //console.log(comments);
                     card.comments = [];
                     card.comments = comments;
-
-                    window.Trello.get('/cards/' + card.id  + '/members?fields=all',
-                      function(members) {
-                        //console.log(members);
-                        card.members = [];
-                        card.members = members;
-                        commit('addCardToList', card);
-                    });
-                    //commit('addCardToList', card);
+                    commit('addCardToList', card);
                 });
               });
             });
@@ -112,7 +104,9 @@ export default new Vuex.Store({
               //console.log('Inside loadLists...');
               lists.forEach( function(list) {
                 commit('setListData', list)
-                dispatch('loadListCards', list.id)
+                dispatch('loadListCards', list.id).then(() => {
+                  console.log('done with cards')
+                })
               });
             });
 

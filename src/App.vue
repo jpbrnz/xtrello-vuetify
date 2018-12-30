@@ -66,7 +66,7 @@ export default {
     return {
       drawer: {
         // sets the open status of the drawer
-        open: true,
+        open: false,
         // sets if the drawer is shown above (false) or below (true) the toolbar
         clipped: true,
         // sets if the drawer is CSS positioned as 'fixed'
