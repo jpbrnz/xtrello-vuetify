@@ -24,9 +24,13 @@
           </ul>
         </p>
         <v-text-field color="green darken-4" v-model="cardtitled" label="Title" required></v-text-field>
-        <v-textarea color="green darken-4" v-model="cardcontent" label="Enter request details" hint="Please provide as much detail as possible"></v-textarea>
         <v-text-field color="green darken-4" v-model="cardURL" label="Enter a referene URL" required></v-text-field>
-        <v-btn color="green darken-2" class="white--text" @click="onCreate">Create Card</v-btn>
+        <v-menu :close-on-content-click="false" v-model="menu2" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
+          <v-text-field color="green darken-4" class="green--text" slot="activator" v-model="date" label="Date needed by:" readonly></v-text-field>
+          <v-date-picker v-model="date" @input="menu2 = false" color="green lighten-2"></v-date-picker>
+        </v-menu>
+        <v-textarea color="green darken-4" v-model="cardcontent" label="Enter request details" hint="Please provide as much detail as possible"></v-textarea>
+        <v-btn color="green lighten-4" class="green--text text--darken-3" @click="onCreate">Create Card</v-btn>
         <v-btn @click="clear">Cancel</v-btn>
       </form>
     </v-card-text>
@@ -43,6 +47,8 @@ export default {
       cardtitled: "",
       cardcontent: "",
       cardURL: "",
+      date: new Date().toISOString().substr(0, 10),
+      menu2: false,
       dialog: false
     };
   },
@@ -52,6 +58,7 @@ export default {
       this.cardtitled = ''
       this.cardcontent = ''
       this.cardURL = ''
+      this.date = ''
       this.dialog = false
     },
     checkForm: function() {
@@ -80,7 +87,7 @@ export default {
         name: this.cardtitled,
         desc: '\n**Initiator:** ' + this.$store.state.member.fullName + '\n\n**Description:** ' + this.cardcontent + '\n\n**Ref URL:** ' + this.cardURL,
         pos: 'top',
-        due: new Date().setDate(new Date().getDate() + 7),
+        due: this.date,
         idList: this.listId,
         idMembers: this.$store.state.member.id
       };

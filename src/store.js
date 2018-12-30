@@ -59,7 +59,7 @@ export default new Vuex.Store({
         },
 
         addCardToList (state, card ) {
-          //console.log('Adding card ' + card.name + ' to list' + card.idList);
+          //console.log('Adding ' + card.name + ' to list' + card.idList);
           var listIdx = state.listIndex[card.idList]
 
           state.lists[listIdx]['cards'].push(card);
@@ -88,10 +88,10 @@ export default new Vuex.Store({
                     //console.log(comments);
                     card.comments = [];
                     card.comments = comments;
-                    
+
                     window.Trello.get('/cards/' + card.id  + '/members?fields=all',
                       function(members) {
-                        console.log(members);
+                        //console.log(members);
                         card.members = [];
                         card.members = members;
                         commit('addCardToList', card);
@@ -121,7 +121,7 @@ export default new Vuex.Store({
         loadMemberData ({ commit, dispatch }) {
           window.Trello.get('/members/me',
             function (member) {
-              console.log('Success callback!!!');
+              //console.log('Success callback!!!');
               commit('setMemberData', member)
 
               member.idBoards.forEach( function(boardId) {

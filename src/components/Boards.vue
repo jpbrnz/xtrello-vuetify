@@ -24,7 +24,7 @@
 
               <v-card>
                 <v-card-actions>
-                  <h3 class="px-2">Visible</h3>
+                  <h3 class="px-2">Visible on Cards</h3>
                   <v-spacer></v-spacer>
 
                   <v-btn fab flat small @click="menu = false">
@@ -50,6 +50,11 @@
                   <v-list-tile>
                     <v-list-tile-action>
                       <v-switch color="green lighten-3" label="Descriptions" v-model="showDescription"></v-switch>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-action>
+                      <v-switch color="green lighten-3" label="Members" v-model="showMembers"></v-switch>
                     </v-list-tile-action>
                   </v-list-tile>
                 </v-list>
@@ -86,16 +91,24 @@
                         <h2>{{ card.name }}</h2>
                         <hr>
                         <div v-if="showDescription">
+                          <div class="subhead font-weight-black grey--text">Details:</div>
                           <vue-markdown>{{ card.desc }}</vue-markdown>
                         </div>
-                        <div class="subhead">Members:</div>
-                        <div style="display:inline;" v-if="card.members[0]" v-for="member in card['members']" :key="member.id">
-                          <v-tooltip top>
-                            <v-btn slot="activator" color="grey" fab outline small>
-                              {{ member.initials }}
-                            </v-btn>
-                            <span>{{ member.fullName }}</span>
-                          </v-tooltip>
+                        <div v-if="showMembers">
+                          <div v-if="card.members[0]" class="members-box">
+                            <div class="subhead font-weight-black grey--text">Members:</div>
+                            <div style="display:inline;" v-for="member in card['members']" :key="member.id">
+                              <v-tooltip top>
+                                <v-btn v-if="!member.avatarHash" slot="activator" color="grey" fab outline small>
+                                  {{ member.initials }}
+                                </v-btn>
+                                <v-btn v-else slot="activator" color="grey lighten-2" fab small>
+                                  <img style="border-radius: 50%;" v-bind:src="'https://trello-avatars.s3.amazonaws.com/' + member.avatarHash +'/30.png'">
+                                </v-btn>
+                                <span>{{ member.fullName }}</span>
+                              </v-tooltip>
+                            </div>
+                          </div>
                         </div>
                         <div v-if="showDue" class="mt-2 mb-2">
                           <v-chip outline v-if="card.due" label color="green">
@@ -104,18 +117,15 @@
                         </div>
                         <div v-if="showComments">
                           <div v-if="card.comments[0]" class="card-comment-box">
+                            <div class="subhead font-weight-black grey--text">Comments:</div>
                             <div v-for="comment in card['comments']" :key="comment.data.text" class="card-comment">
-                              <v-card color="evoth mt-2">
-                                <v-card-title>
-                                  <div>
-                                    <div class="subhead">
-                                      <v-badge color="transparent">
-                                        <v-icon slot="badge" small>chat</v-icon>
-                                        <span><strong>{{ comment.memberCreator.fullName }}</strong></span>
-                                      </v-badge>
-                                    </div>
-                                  </div>
-                                </v-card-title>
+                              <div class="subhead mt-4 mb-0">
+                                <v-badge color="transparent">
+                                  <v-icon slot="badge" small>chat</v-icon>
+                                  <span><strong>{{ comment.memberCreator.fullName }}</strong></span>
+                                </v-badge>
+                              </div>
+                              <v-card color="evoth ml-4 px-4 py-4">
                                 <v-card-text>
                                   <vue-markdown>{{ comment.data.text }}</vue-markdown>
                                   <p class="small"><strong><em> Commented on <span aria-hidden="true" class="ei ei-icon_clock_alt"></span> {{ comment.date | formatDate }}</em></strong></p>
@@ -193,7 +203,8 @@ export default {
       showLabels: true,
       showComments: true,
       showDescription: true,
-      showDue: true
+      showDue: true,
+      showMembers: true
     }
 
   },

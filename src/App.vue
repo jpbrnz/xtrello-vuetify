@@ -176,6 +176,7 @@ li {
 a {
     transition: color 1s ease;
     color: #28a745;
+    word-wrap: break-word;
     &:hover {
         color: #1e7e34;
     }
