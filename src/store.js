@@ -88,7 +88,7 @@ export default new Vuex.Store({
                     //console.log(comments);
                     card.comments = [];
                     card.comments = comments;
-                    commit('addCardToList', card);
+                    commit('addCardToList', card)
                 });
               });
             });
@@ -104,9 +104,7 @@ export default new Vuex.Store({
               //console.log('Inside loadLists...');
               lists.forEach( function(list) {
                 commit('setListData', list)
-                dispatch('loadListCards', list.id).then(() => {
-                  console.log('done with cards')
-                })
+                dispatch('loadListCards', list.id)
               });
             });
 
